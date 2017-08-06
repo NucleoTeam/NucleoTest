@@ -19,23 +19,31 @@ public class AccountService {
 
     protected String serviceUrl;
 
-    private static String username;
-
-    private static String password;
-
     protected Logger logger = Logger.getLogger(AccountService.class.getName());
 
     public AccountService(String serviceUrl) {
         this.serviceUrl = serviceUrl.startsWith("http") ? serviceUrl : "http://" + serviceUrl;
-        username = UUID.randomUUID().toString(); // set test username
-        password = UUID.randomUUID().toString(); // set test password
     }
 
-    public String getLogin(){
+    public String getLogin(String username, String password){
         return restTemplate.postForObject(
             serviceUrl+"/authenticate/login",
             new AccountRequest(username,password),
             String.class
+        );
+    }
+    public String getRegister(String username, String password){
+        return restTemplate.postForObject(
+                serviceUrl+"/authenticate/create",
+                new AccountRequest(username,password),
+                String.class
+        );
+    }
+    public String getSessionValid(String username, String password){
+        return restTemplate.postForObject(
+                serviceUrl+"/authenticate/create",
+                new AccountRequest(username,password),
+                String.class
         );
     }
 }
