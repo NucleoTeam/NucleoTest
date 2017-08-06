@@ -23,8 +23,7 @@ public class AccountService {
 
     private static String password;
 
-    protected Logger logger = Logger.getLogger(AccountService.class
-            .getName());
+    protected Logger logger = Logger.getLogger(AccountService.class.getName());
 
     public AccountService(String serviceUrl) {
         this.serviceUrl = serviceUrl.startsWith("http") ? serviceUrl : "http://" + serviceUrl;
@@ -32,7 +31,7 @@ public class AccountService {
         password = UUID.randomUUID().toString(); // set test password
     }
 
-    public String getAccount(){
+    public String getLogin(){
         return restTemplate.postForObject(
             serviceUrl+"/authenticate/login",
             new AccountRequest(username,password),
