@@ -16,15 +16,23 @@ import java.util.TreeMap;
 public class Login {
     public static TreeMap<String, TreeMap<String, ArrayList<Long>>> events = new TreeMap<>();
 
-    @GetMapping("/logins")
-    public Object logins(){
+    @GetMapping("/login")
+    public Object login(){
         return events.get("login");
     }
 
     @GetMapping("/create")
     public Object create(){
-        return events.get("create");
+        return events.get("unique_account");
     }
 
+    @GetMapping("/session")
+    public Object session(){
+        return events.get("session_verification");
+    }
 
+    @GetMapping("/logout")
+    public Object logout(){
+        return events.get("session_logout");
+    }
 }
