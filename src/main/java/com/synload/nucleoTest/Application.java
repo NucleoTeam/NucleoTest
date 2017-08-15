@@ -1,5 +1,6 @@
 package com.synload.nucleoTest;
 
+import com.synload.nucleoTest.endpoints.Login;
 import com.synload.nucleoTest.repositories.AccountService;
 import com.synload.nucleoTest.tests.AccountAuthenticationTests;
 import org.springframework.boot.SpringApplication;
@@ -9,6 +10,8 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.TreeMap;
 
 /**
  * Created by Nathaniel on 8/5/2017.
@@ -20,7 +23,9 @@ public class Application {
     public static final String ACCOUNT_SERVICE_URL = "ACCOUNTSERVICE";
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-
+        Login.events.put("login", new TreeMap<String, Integer>(){{
+            put("",0);
+        }});
     }
 
     @LoadBalanced
