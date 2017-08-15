@@ -31,24 +31,20 @@ public class AccountAuthenticationTests {
 
     @Scheduled(fixedRate=20000)
     public void test_one(){
-
-        logger.info("Make sure only 1 account can be created");
         String username = UUID.randomUUID().toString(); // set test username
         String password = UUID.randomUUID().toString(); // set test password
 
-        logger.info("Register with account details");
         String response = null;
         try{
-            response = accountService.getRegister(username, password);
+            response = accountService.register(username, password);
         }catch(Exception e){
             e.printStackTrace();
         }
         setLoginStats( response, "create", "1: create account", 1);
 
-        logger.info("Login again [expected=new session]");
         response = null;
         try{
-            response = accountService.getLogin(username, password);
+            response = accountService.login(username, password);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -58,30 +54,24 @@ public class AccountAuthenticationTests {
 
     @Scheduled(initialDelay=1000, fixedRate=20000)
     public void test_two(){
-
-        logger.info("Make sure only 1 account can be created");
-
         String username = UUID.randomUUID().toString(); // set test username
         String password = UUID.randomUUID().toString(); // set test password
 
-        logger.info("Register with account details");
         String response = null;
         try{
-            response = accountService.getRegister(username, password);
+            response = accountService.register(username, password);
         }catch(Exception e){
             e.printStackTrace();
         }
         setLoginStats( response, "unique_account", "1: create new account", 1);
 
-        logger.info("Register with again with the same account details [expected=null]");
         response = null;
         try{
-            response = accountService.getRegister(username, password);
+            response = accountService.register(username, password);
         }catch(Exception e){
             e.printStackTrace();
         }
         setLoginStats( response, "unique_account", "2: repeated details, not unique account", 0);
-        logger.info("session: "+response);
 
     }
 
@@ -90,24 +80,60 @@ public class AccountAuthenticationTests {
         String username = UUID.randomUUID().toString(); // set test username
         String password = UUID.randomUUID().toString(); // set test password
 
-        logger.info("Register with account details");
         String response = null;
+        String session = "";
         try{
-            response = accountService.getRegister(username, password);
+            session = response = accountService.register(username, password);
         }catch(Exception e){
             e.printStackTrace();
         }
-        setLoginStats(accountService.getRegister(username, password), "session_verification", "1: create account", 1);
+        setLoginStats(response, "session_verification", "1: create account", 1);
 
-        logger.info("Check session and make sure its valid [expected=true]");
         response = null;
         try{
-            response = accountService.getSessionValid(username, password);
+            response = accountService.sessionValidation(session);
         }catch(Exception e){
             e.printStackTrace();
         }
-        setLoginStats(accountService.getRegister(username, password), "session_verification", "1: session validation", 3);
-        logger.info("isValid: "+response);
+        setLoginStats(response, "session_verification", "1: session validation", 3);
+
+    }
+
+    @Scheduled(initialDelay=3000, fixedRate=20000)
+    public void test_four(){
+        String username = UUID.randomUUID().toString(); // set test username
+        String password = UUID.randomUUID().toString(); // set test password
+
+        String response = null;
+        String session = "";
+        try{
+            session = response = accountService.register(username, password);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        setLoginStats(response, "session_logout", "1: create account", 1);
+
+        response = null;
+        try{
+            response = accountService.sessionValidation(session);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        setLoginStats(response, "session_logout", "2: validate session", 3);
+        response = null;
+        try{
+            response = accountService.logout(session);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        setLoginStats(response, "session_logout", "3: session logout", 3);
+        response = null;
+        try{
+            response = accountService.sessionValidation(session);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        setLoginStats(response, "session_logout", "4: check invalidated session", 4);
 
     }
 

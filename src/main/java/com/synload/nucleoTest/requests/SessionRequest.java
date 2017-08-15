@@ -40,6 +40,9 @@ public class SessionRequest {
 
     public SessionRequest() {
     }
+    public SessionRequest(String session) {
+        this.session = session;
+    }
 
     public SessionRequest(String session, String key) {
         this.session = session;

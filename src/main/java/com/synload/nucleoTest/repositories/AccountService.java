@@ -2,6 +2,7 @@ package com.synload.nucleoTest.repositories;
 
 import com.synload.nucleoTest.domain.AccountData;
 import com.synload.nucleoTest.requests.AccountRequest;
+import com.synload.nucleoTest.requests.SessionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.web.client.RestTemplate;
@@ -25,24 +26,31 @@ public class AccountService {
         this.serviceUrl = serviceUrl.startsWith("http") ? serviceUrl : "http://" + serviceUrl;
     }
 
-    public String getLogin(String username, String password){
+    public String login(String username, String password){
         return restTemplate.postForObject(
             serviceUrl+"/authenticate/login",
             new AccountRequest(username,password),
             String.class
         );
     }
-    public String getRegister(String username, String password){
+    public String register(String username, String password){
         return restTemplate.postForObject(
                 serviceUrl+"/authenticate/create",
                 new AccountRequest(username,password),
                 String.class
         );
     }
-    public String getSessionValid(String username, String password){
+    public String sessionValidation(String session){
         return restTemplate.postForObject(
-                serviceUrl+"/authenticate/create",
-                new AccountRequest(username,password),
+                serviceUrl+"/authenticate/session",
+                new SessionRequest(session),
+                String.class
+        );
+    }
+    public String logout(String session){
+        return restTemplate.postForObject(
+                serviceUrl+"/authenticate/logout",
+                new SessionRequest(session),
                 String.class
         );
     }
