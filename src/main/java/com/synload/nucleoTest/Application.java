@@ -23,9 +23,6 @@ public class Application {
     public static final String ACCOUNT_SERVICE_URL = "ACCOUNTSERVICE";
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        Login.events.put("login", new TreeMap<String, Integer>(){{
-            put("",0);
-        }});
     }
 
     @LoadBalanced
